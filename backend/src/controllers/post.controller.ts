@@ -5,7 +5,7 @@ import { PostService } from '@/services/post.service';
 import { NextFunction, Response } from 'express';
 
 class PostController {
-  public postService = new PostService();
+  private postService = new PostService();
 
   public create = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
@@ -25,7 +25,7 @@ class PostController {
     try {
       const user = req.user;
       const page = Number(req.query.page);
-      const ret = await this.postService.feed(user, page);
+      const ret = await this.postService.feedResponse(user, page);
       res.status(200).json(ret);
     } catch (error) {
       next(error);
@@ -36,7 +36,7 @@ class PostController {
       const user = req.user;
       const page = Number(req.query.page);
       const id = Number(req.query.id);
-      const ret = await this.postService.personalPage(user, id, page);
+      const ret = await this.postService.personalPageResponse(user, id, page);
       res.status(200).json(ret);
     } catch (error) {
       next(error);
@@ -50,6 +50,20 @@ class PostController {
       const id = Number(req.query.id);
       const ret = await this.postService.addComment(createComment, user, id);
       res.status(201).json(ret);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public toggleLike = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const user = req.user;
+
+      const postId = Number(req.query.id);
+
+      await this.postService.toggleLike(user, postId);
+
+      res.status(200).send();
     } catch (error) {
       next(error);
     }

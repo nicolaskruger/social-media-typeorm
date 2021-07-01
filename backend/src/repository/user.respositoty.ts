@@ -1,43 +1,32 @@
 import { UserEntity } from '@/entity/users.entity';
 import { User } from '@/interfaces/users.interface';
-import { getRepository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 
-export class UserRepository {
+@EntityRepository(UserEntity)
+export class UserRepository extends Repository<UserEntity> {
   private users = UserEntity;
 
-  private getUserRepository() {
-    return getRepository(this.users);
-  }
-
   public async findAllUsers() {
-    return await this.getUserRepository().find();
+    return await this.find();
   }
 
   public async findUserById(id: number) {
-    return await this.getUserRepository().findOne({ where: { id } });
+    return await this.findOne({ where: { id } });
   }
 
   public async findUserByEmail(email: string) {
-    return await this.getUserRepository().findOne({ where: { email } });
-  }
-
-  public async save(user: User) {
-    return await this.getUserRepository().save(user);
+    return await this.findOne({ where: { email } });
   }
 
   public async update(id: number, user: User) {
-    return await this.getUserRepository().update(id, user);
+    return await this.update(id, user);
   }
   public async updateUser(user: UserEntity) {
-    return await this.getUserRepository().update(user.id, user);
-  }
-
-  public async delete(id: number) {
-    await this.getUserRepository().delete({ id });
+    return await this.update(user.id, user);
   }
 
   public async findUserAndInfo(id: number) {
-    return await this.getUserRepository().findOne({
+    return await this.findOne({
       relations: ['inviteSend', 'inviteRecive'],
       join: {
         alias: 'user',

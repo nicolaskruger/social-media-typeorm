@@ -1,14 +1,11 @@
 import { FriendsEntity } from '@/entity/friend.entity';
 import { UserEntity } from '@/entity/users.entity';
 import { User } from '@/interfaces/users.interface';
-import { getRepository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 
-export class FriendRepository {
-  private friends = FriendsEntity;
-
+@EntityRepository(FriendsEntity)
+export class FriendRepository extends Repository<FriendsEntity> {
   public saveFriends = async (userA: UserEntity, userB: UserEntity) => {
-    const friendRepository = getRepository(this.friends);
-
     const friend01: FriendsEntity = {
       friend1: userA,
       friend2: userB,
@@ -21,15 +18,13 @@ export class FriendRepository {
       id: null,
     };
 
-    await friendRepository.save(friend01);
+    await this.save(friend01);
 
-    await friendRepository.save(friend02);
+    await this.save(friend02);
   };
 
   public async findFriends(user: User) {
-    const friendRepository = getRepository(this.friends);
-
-    const friends = await friendRepository.find({
+    const friends = await this.find({
       relations: ['friend2'],
       where: {
         friend1: user.id,

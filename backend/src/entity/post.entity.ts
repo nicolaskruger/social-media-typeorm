@@ -1,6 +1,6 @@
 import { Post } from '@/interfaces/post.interface';
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CommentsEntity } from './comments.entity';
 import { UserEntity } from './users.entity';
 
@@ -24,8 +24,8 @@ export class PostEntity implements Post {
   createAt: Date;
 
   @ManyToMany(() => UserEntity, user => user)
-  @JoinColumn()
-  likes: UserEntity;
+  @JoinTable()
+  likes: UserEntity[];
 
   @OneToMany(() => CommentsEntity, comment => comment.post)
   comments: CommentsEntity[];

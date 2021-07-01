@@ -4,11 +4,12 @@ import { User } from '@/interfaces/users.interface';
 import { InviteMapper } from '@/mapper/invite.mapper';
 import { InviteRepository } from '@/repository/invite.repository';
 import { InviteValidator } from '@/validator/invite.validator';
+import { getCustomRepository } from 'typeorm';
 import { FriendService } from './friend.service';
 import UserService from './users.service';
 
 export class InviteService {
-  private inviteRepository = new InviteRepository();
+  private invites = InviteRepository;
 
   private userService = new UserService();
 
@@ -22,27 +23,35 @@ export class InviteService {
     const senderEntity = await this.userService.getUserAndInfo(sender.id);
     const reciverEntiy = await this.userService.getUserAndInfo(sendInvite.id);
 
+    const inviteRepository = getCustomRepository(this.invites);
+
     this.inviteValidator.sendInviteValidator(senderEntity, reciverEntiy);
 
     const inviteEntity = this.inviteMapper.toEntityFromSend(sendInvite, senderEntity, reciverEntiy);
 
-    await this.inviteRepository.save(inviteEntity);
+    await inviteRepository.save(inviteEntity);
   }
 
   public async denyInvite(user: User, sendId: number) {
-    const invite = await this.inviteRepository.findSpecificReciveInvite(sendId, user.id);
+    const inviteRepository = getCustomRepository(this.invites);
+
+    const invite = await inviteRepository.findSpecificReciveInvite(sendId, user.id);
     if (!invite) throw new HttpException(409, "This invite doesn't exists");
-    await this.inviteRepository.delete(invite);
+    await inviteRepository.delete(invite);
   }
 
   public async invitesRecive(user: User) {
-    const invites = await this.inviteRepository.findReciveInvites(user.id);
+    const inviteRepository = getCustomRepository(this.invites);
+
+    const invites = await inviteRepository.findReciveInvites(user.id);
 
     return invites;
   }
 
   public async acceptInvite(user: User, sendId: number) {
-    const invite = await this.inviteRepository.findSpecificReciveInvite(sendId, user.id);
+    const inviteRepository = getCustomRepository(this.invites);
+
+    const invite = await inviteRepository.findSpecificReciveInvite(sendId, user.id);
 
     if (!invite) throw new HttpException(409, "This invite doesn't exists");
 
@@ -52,11 +61,13 @@ export class InviteService {
 
     await this.friendService.friends(userEntity, friendEntity);
 
-    await this.inviteRepository.delete(invite);
+    await inviteRepository.delete(invite);
   }
 
   public async invitesSend(user: User) {
-    const invites = await this.inviteRepository.findSendInvites(user.id);
+    const inviteRepository = getCustomRepository(this.invites);
+
+    const invites = await inviteRepository.findSendInvites(user.id);
 
     return invites;
   }

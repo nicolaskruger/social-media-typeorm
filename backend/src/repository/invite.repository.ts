@@ -1,19 +1,12 @@
 import { InviteEntity } from '@/entity/invite.entity';
-import { getRepository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 
-export class InviteRepository {
+@EntityRepository(InviteEntity)
+export class InviteRepository extends Repository<InviteEntity> {
   private invites = InviteEntity;
 
-  private getInviteRepository() {
-    return getRepository(this.invites);
-  }
-
-  public async save(invite: InviteEntity) {
-    await this.getInviteRepository().save(invite);
-  }
-
   public async findReciveInvites(userId: number) {
-    return await this.getInviteRepository().find({
+    return await this.find({
       where: [{ destiny: userId }],
       join: {
         alias: 'invite',
@@ -25,7 +18,7 @@ export class InviteRepository {
   }
 
   public async findSendInvites(userId: number) {
-    return await this.getInviteRepository().find({
+    return await this.find({
       where: [{ origin: userId }],
       join: {
         alias: 'invite',
@@ -37,11 +30,8 @@ export class InviteRepository {
   }
 
   public async findSpecificReciveInvite(sendId: number, reciveId: number): Promise<InviteEntity> {
-    return await this.getInviteRepository().findOne({
+    return await this.findOne({
       where: [{ origin: sendId, destiny: reciveId }],
     });
-  }
-  public async delete(invite: InviteEntity) {
-    await this.getInviteRepository().delete(invite);
   }
 }

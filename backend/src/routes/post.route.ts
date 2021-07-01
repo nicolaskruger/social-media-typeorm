@@ -27,6 +27,7 @@ class PostRoute implements Route {
       authMiddleware,
       this.postController.addComment,
     );
+    this.router.post(`${this.path}/like`, validationMiddleware(IdQueryDto, 'query'), authMiddleware, this.postController.toggleLike);
   }
 }
 
