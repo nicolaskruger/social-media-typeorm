@@ -1,0 +1,23 @@
+.loader {
+  border: 10px solid var(--cyan); /* Light grey */
+  border-top: 10px solid #3498db00; /* Blue */
+  border-radius: 50%;
+  width: 2px;
+  height: 2px;
+  animation: spin 2s linear infinite;
+}
+.loader__place_holder {
+  border: 10px solid #3498db00; /* Light grey */
+  border-top: 10px solid #3498db00; /* Blue */
+  border-radius: 50%;
+  width: 2px;
+  height: 2px;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

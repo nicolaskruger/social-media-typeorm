@@ -1,0 +1,27 @@
+.user-header {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  gap: 30px;
+  padding-bottom: 20px;
+  border-bottom: var(--currentLine) solid 1px;
+}
+.user-header__div {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  justify-content: center;
+  gap: 20px;
+}
+.user-header__div__span {
+  width: 20px;
+}
+
+.user-header__name {
+  color: var(--yellow);
+  font-weight: lighter;
+}
+.user-header__email {
+  color: var(--purple);
+  font-weight: lighter;
+}

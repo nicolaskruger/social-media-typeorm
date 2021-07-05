@@ -1,0 +1,14 @@
+.message {
+  width: 100%;
+  height: 20px;
+}
+
+.message-success {
+  color: var(--green);
+}
+.message-error {
+  color: var(--red);
+}
+.message-hide {
+  color: rgba(0, 0, 0, 0);
+}

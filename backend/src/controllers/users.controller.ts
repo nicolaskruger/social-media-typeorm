@@ -11,7 +11,9 @@ class UsersController {
     try {
       const user: User = req.user;
 
-      res.json(user);
+      const newUser = await this.userService.findUserById(user.id);
+
+      res.json(newUser);
     } catch (error) {
       next(error);
     }

@@ -1,0 +1,17 @@
+.input-label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.input-label__label {
+  text-align: start;
+  display: flex;
+  justify-content: start;
+}
+.input-label__input {
+  background-color: var(--currentLine);
+  border: 0;
+  padding: 0 5px;
+  height: 40px;
+  color: var(--orange);
+}
